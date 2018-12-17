@@ -1,0 +1,18 @@
+#!/usr/bin/env php
+<?php
+
+require './vendor/autoload.php';
+
+use Symfony\Component\Console\Application AS CliApp;
+use Slim\App AS SlimApp;
+
+$settings = require './src/settings.php';
+$app = new SlimApp($settings);
+require './src/dependencies.php';
+
+$cli_app = new CliApp();
+
+$cli_app->add(new Mozk\Commands\EchoCommand($app->getContainer()));
+$cli_app->add(new Mozk\Commands\TestCommand($app->getContainer()));
+
+$cli_app->run();

@@ -2,33 +2,24 @@ version: '3'
 
 services:
     app:
-        image: php:7.3-fpm
+        build: ./docker/dockerfiles/app
         working_dir: /resource/
         environment:
             docker: "true"
-        volumes:
-            - .:/resource
-
-    nginx:
-        image: nginx:latest
         ports:
             - 80:80
         volumes:
-            - ./docker/resources/nginx/conf.d:/etc/nginx/conf.d
-        links:
-            - app
+            - .:/resource
 
     db:
         image: mysql:5.7
         environment:
             MYSQL_ROOT_PASSWORD: root
-            MYSQL_USER: mozk
-            MYSQL_PASSWORD: mozk
             MYSQL_DATABASE: mozk
         ports:
             - 3306:3306
         volumes:
-            - ./docker/volumes/mysql:/var/lib/mysql
+            - ./volumes/mysql:/var/lib/mysql
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
@@ -41,6 +32,6 @@ services:
         ports:
             - 8080:80
         volumes:
-            - ./docker/volumes/phpmyadmin/sessions:/sessions
+            - ./volumes/phpmyadmin/sessions:/sessions
         links:
             - db
